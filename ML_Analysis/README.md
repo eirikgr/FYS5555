@@ -39,4 +39,4 @@ To be able to run the BDT tutorial you'd need some additional installations:
 
 11. Install xgboost
    - `conda install -c conda-forge xgboost`
-   - if it doesn't work (which is very likely), inside the environment, do 'pip install xgboost==0.71'
+   - if it doesn't work (which is very likely), inside the environment, do ´pip install xgboost==0.71´
