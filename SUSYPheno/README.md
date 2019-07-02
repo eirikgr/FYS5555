@@ -1,4 +1,4 @@
-# SUSYPheno
+# SUSYPheno (Eirik Gramstat\d)
 A program for doing scans of pMSSM models taking into account constraints from various measurements. 
 The core code is written by Børge Kile Gjelsten and modified/extended by Eirik Gramstad.
 
