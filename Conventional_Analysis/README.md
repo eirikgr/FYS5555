@@ -3,4 +3,4 @@
 This part has been prepared by Even Håland and focuses on data analysis using cuts on the various variables.
 
  - He has made an effort in explaining the various data analysis concepts in the "Presentation" folder.
- - In the "Notebooks" you will find an example of an analysis with two leptons as final state (dilepton analysis).  
+ - In the "Notebooks" folder, you will find an example analysis with two leptons as final state (dilepton analysis).  
