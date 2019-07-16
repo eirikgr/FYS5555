@@ -1,6 +1,8 @@
 # FYS5555
 
-This git page has been created to gather all the "hands-on" material of the course Research-based particle physics (FYS5555). 
+This git page has been created to gather all the "hands-on" material of the course Research-based particle physics (FYS5555).
+
+To copy all the material on your PC, in the terminal do `git clone https://github.com/Etienne357/FYS5555.git`
 
 - CompHEP is a software package and event generator used to compute cross-sections. Follow the instructions on the following readme file for its installation: https://github.com/Etienne357/FYS5555/blob/master/CompHEP/README.md.
 - An example dilepton (cut-and-count) analysis on the open data has been provided in the folder "Conventional_Analysis". This can be used as a skeleton to plot histograms and for further analyses. Instructions are found in https://github.com/Etienne357/FYS5555/tree/master/Conventional_Analysis/README.md.
