@@ -1,4 +1,4 @@
-Follow the temporary instructions to set up Anaconda with the required packages. They will be updated soon and python3 will be used instead of python2.
+Follow the temporary instructions to set up Anaconda with the required packages. They will be updated soon and python3 will probably be used instead of python2.
 
 # Setting up the environment (linux)
 
@@ -13,17 +13,17 @@ Follow the temporary instructions to set up Anaconda with the required packages.
    - To use the conda binary packages from the NLeSC Anaconda Cloud repository, you need to add the appropriate NLeSC main channel: `conda config --add channels https://conda.anaconda.org/NLeSC`
 4. Install ROOT (version 6, python 2) in a new envoronment (names rootenv below)
    - `conda create --name=testenv root=6 python=2`
-   -  conda activate testenv
-   - for ROOT to work you would also need `conda install -c conda-forge libstdcxx-ng`
-   - try running ROOT by doing `root -l``
+   - `conda activate testenv`
+   - ROOT is already installed in the envirinment. Try running it by doing `root -l`. If ROOT doesn't work (unlikely), install it manually by doing `conda install -c conda-forge root` 
+   
 6. Install root_numpy
    - `conda install -c conda-forge root_numpy`
 7. Install matplotlib
    - `conda install -c conda-forge matplotlib`
 8. Install scikit learn
-   - `conda install -c anaconda scikit-learn`
+   - `conda install -c conda-forge anaconda scikit-learn`
 9. Install h5py
-   - `conda install -c anaconda h5py`
+   - `conda install -c conda-forge anaconda h5py`
 10. Getting pyROOT to work add the following to your LD_LIBRARY_PATH:
    - `export LD_LIBRARY_PATH=/opt/app-sync/matlab/bin/glnxa64/`
 
@@ -37,4 +37,4 @@ To be able to run the BDT tutorial you'd need some additional installations:
 
 11. Install xgboost
    - `conda install -c conda-forge xgboost`
-   - if it doesn't work (which is very likely), inside the environment, do ´pip install xgboost==0.71´
+   - if it doesn't work (which is very likely), inside the environment, do `pip install xgboost==0.71`
