@@ -11,17 +11,17 @@ Follow the instructions to set up Anaconda2 with the required packages. The defa
       - at the end you have to choose if you want the anaconda path to be put in your .bashrc file (YES: means that any new shell you open will have anaconda, NO: you will need to add the anaconda path to your PATH environment variable whenever you like to use anaconda)
 3. First do some initialization of the setup
    - To use the conda binary packages from the NLeSC Anaconda Cloud repository, you need to add the appropriate NLeSC main channel: `conda config --add channels https://conda.anaconda.org/NLeSC`
-4. Create an environment as follows 
+4. Create an environment as follows: 
    - `conda create -n name_of_environment`
-   - `conda activate testenv`
-5. Install the following packages in your working environment:
+5. Activate the environment: `conda activate name_of_environment`
+6. Install the following packages in your working environment:
    - `conda install -c conda-forge uproot`
    - `conda install -c conda-forge jupyterlab`
    - `conda install -c anaconda pandas`
    - `conda install -c anaconda h5py`
    - `conda install -c conda-forge matplotlib`
    - `conda install -c conda-forge anaconda scikit-learn`
-6. Install ROOT
+7. Install ROOT (latest version 6.18)
    - `conda install -c conda-forge root`
    - `conda install -c conda-forge/label/gcc7 root`
 8. For the BDT algorithm, you will need the xgboost package:
