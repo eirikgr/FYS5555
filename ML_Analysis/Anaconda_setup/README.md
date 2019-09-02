@@ -24,8 +24,6 @@ Follow the instructions to set up Anaconda2 with the required packages. The defa
 6. Install ROOT
    - `conda install -c conda-forge root`
    - `conda install -c conda-forge/label/gcc7 root`
-7. Install root_numpy
-   - `conda install -c conda-forge root_numpy`
 8. For the BDT algorithm, you will need the xgboost package:
    - `conda install -c conda-forge xgboost`
 
