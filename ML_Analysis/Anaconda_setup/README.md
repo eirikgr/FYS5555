@@ -15,13 +15,12 @@ Follow the instructions to set up Anaconda2 with the required packages. The defa
    - `conda create -n name_of_environment`
    - `conda activate testenv`
 5. Install the following packages in your working environment:
-   - `conda install -c conda-forge uproot`
-   - `conda install -c conda-forge jupyterlab`
-   - `conda install -c anaconda pandas`
-   - `conda install -c anaconda h5py`
-   - `conda install -c anaconda pytables`
-   - `conda install -c conda-forge matplotlib`
-   - `conda install -c conda-forge anaconda scikit-learn`
+    `conda install -c conda-forge uproot`
+    `conda install -c conda-forge jupyterlab`
+    `conda install -c anaconda pandas`
+    `conda install -c anaconda h5py`
+    `conda install -c conda-forge matplotlib`
+    `conda install -c conda-forge anaconda scikit-learn`
 6. Install ROOT
    - `conda install -c conda-forge root`
    - `conda install -c conda-forge/label/gcc7 root`
