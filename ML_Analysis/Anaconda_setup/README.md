@@ -24,7 +24,7 @@ Follow the instructions to set up Anaconda2 with the required packages. The defa
 7. OPTIONAL: if you want ROOT in your environment, install it (latest version 6.18) by doing
    - `conda install -c conda-forge root`
    - `conda install -c conda-forge/label/gcc7 root`
-   NOTE: We have tried our best to remove all ROOT dependencies for the machine learning analysis and see how far we can get.
+   - NOTE: We have tried our best to remove all ROOT dependencies for the machine learning analysis and see how far we can get.
 8. For the BDT algorithm, you will need the xgboost package:
    - `conda install -c conda-forge xgboost`
 
