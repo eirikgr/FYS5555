@@ -8,7 +8,7 @@ The *ReadRootFiles* read the openData ntuples from file and produce h5 files. Th
 Two additional packages (assuming you have followed instructions https://github.com/Etienne357/FYS5555/tree/master/ML_Analysis/Anaconda_setup) are needed:
 
 ```
-pip install
+pip install import-ipynb
 ```
 
 and 
