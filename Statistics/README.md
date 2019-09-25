@@ -21,7 +21,7 @@ limits (Fig. 2, top left) from https://arxiv.org/abs/1407.7494. The format is
 ...
 
 The plot from the above publication can be reproduced with the commands:
-    - `root -l -q runLimits.cpp`
-    - `root -l limitPlot.cpp`
+- `root -l -q runLimits.cpp`
+- `root -l limitPlot.cpp`
 
 The code depends on ROOT (which you have already installed in your Anaconda environment).
