@@ -6,15 +6,15 @@ The *ReadRootFiles* read the openData ntuples from file and produce h5 files. Th
 
 # Installation
 Two additional packages (assuming you have followed instructions https://github.com/Etienne357/FYS5555/tree/master/ML_Analysis/Anaconda_setup) are needed:
+(NOTE: Always work in the conda environment!)
 
 ```
-pip install
+pip install import-ipynb
 ```
 
 and 
 
 ```
-conda config --add channels conda-forge # if you haven't added conda-forge already
 conda install awkward
 conda install awkward-numba # optional: integration with and optimization by Numba
 ```
