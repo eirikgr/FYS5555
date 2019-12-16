@@ -2,9 +2,9 @@
 
 Machine learning tools to be used for educational purposes
 
-This section is still work in progress. An example of a full analysis on different physics scenarios (signal vs. background) will be available soon.
+This section is still work in progress.
 
-- The program has been written in a generic way possible so that you can check the performance of different ML algorithms: logistic regression, boosted decision tree (BDT), random forest, etc. You can also implement your own algorithm.
-- You will find details in the respective notebooks.
+- In the "small_file_analysis", you will find a simple classification of two SM backgrounds (Zmumu and ttbar). Note that in this example, uproot is used directly but for the general analysis, a different method will be used due to memory constraints.
+- A more general (and more complicated) classification analysis is given in the "OsloML" folder. Read the instructions in the respective README file.
 - The folder "GeiloWinterSchool2018" is a good place to learn about machine learning and the different algorithms.
-- Machine learning analysis on the Higgs data will be added soon.
+- Machine learning analysis on the Higgs data is located in the "Higgs_ML" folder. There you will find all necessary details on the boosted decision tree (BDT).
