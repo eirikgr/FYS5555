@@ -16,9 +16,8 @@ like this:
 $ ls
 2lep  Histograms  infofile.py  MakePlots.py  MySelector.C  MySelector.h  Plots  README  README.md  runSelector.py
 ```
-Run the code on data:
+Run the code on data (note that the code is not compatible with python version 3, depending on what you have installed, you may need to explicitly specify "python2" in the command):
 - `python runSelector.py Data`
-(Note that the code is not compatible with python version 3. Depending on what you have installed, you may need to explicitly specify "python2" in the command.)
 
 Run the code on MC (there are many MC datasets, so this may take a bit longer):
 - `python runSelector.py MC`
