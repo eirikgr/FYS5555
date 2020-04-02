@@ -37,15 +37,29 @@ Diboson = [361600, 361601, 361602, 361603, 361604, 361606, 361607, 361609, 36161
 
 Top = [410000, 410011, 410012, 4100013, 410014, 410025, 410026]
 
-fileIDs = {'Diboson':Diboson, 'Zjets':Zjets, 'Wjets':Wjets, 'Top':Top}
+# Signals
+
+signals = ['Zprime2000']
+
+Zprime2000 = [301215, 301220];
+
+
+fileIDs = {'Diboson':Diboson, 'Zjets':Zjets, 'Wjets':Wjets, 'Top':Top, 'Zprime2000':Zprime2000}
 
 hist_bkg = {}
 for var in variables:
         hist_bkg[var] = {}
         for bkg in backgrounds:
-                hist_bkg[var][bkg] = TH1F() 
+                hist_bkg[var][bkg] = TH1F()
 
-colours = dict(Diboson=kAzure+1, Top=kRed+1, Zjets=kOrange-2, Wjets=kGray) 
+hist_sig = {}
+for var in variables:
+        hist_sig[var] = {}
+        for sig in signals:
+                hist_sig[var][sig] = TH1F()
+                
+
+colours = dict(Diboson=kAzure+1, Top=kRed+1, Zjets=kOrange-2, Wjets=kGray, Zprime2000=kBlue) 
 
 
 # Extract info about cross section and sum of weights from infofile 
@@ -109,6 +123,9 @@ for filename in os.listdir('Histograms/MC/'):
                         for bkg in backgrounds:
                                 if file_id in fileIDs[bkg]: 
                                         hist_bkg[var][bkg] = fill_hist(hist_bkg[var][bkg], 'h_'+channel+'_'+var, bkg, file_id)
+                        for sig in signals:
+                                if file_id in fileIDs[sig]: 
+                                        hist_sig[var][sig] = fill_hist(hist_sig[var][sig], 'h_'+channel+'_'+var, sig, file_id)
 
 
 # Get data 
@@ -183,8 +200,14 @@ leg.SetBorderSize(0)
 
 bkg_labels = {'Zjets':'Z+jets', 'Top':'Top', 'Diboson':'Diboson', 'Wjets':'W+jets'}
 
+sig_labels = {'Zprime2000':"Z' (2 TeV)"}
+
 for bkg in backgrounds: 
-        leg.AddEntry(hist_bkg['pt1'][bkg], bkg_labels[bkg], "f") 
+        leg.AddEntry(hist_bkg['pt1'][bkg], bkg_labels[bkg], "f")
+
+for sig in signals: 
+        leg.AddEntry(hist_sig['pt1'][sig], sig_labels[sig], "f")
+        
 leg.AddEntry(hist_d['pt1'],"Data","ple")
 
 selection = ""
@@ -223,7 +246,11 @@ for var in variables:
                 stack[var].SetMaximum(maximum*10E4)
 
         hist_d[var].Draw("same e0")
-        leg.Draw("same") 
+        leg.Draw("same")
+
+        for sig in signals:
+                hist_sig[var][sig].SetFillColor(0);
+                hist_sig[var][sig].Draw("same hist");
         
         s = TLatex()
         s.SetNDC(1);
