@@ -34,7 +34,9 @@ ready to move on to modify the analysis according to your needs.
 ## Modifying the code
 
 To perform the analysis you are interested in, you will likely need to modify the event selection and
-add additional histograms.
+add additional histograms. Note that if your final state of interest does not contain (at least) two
+leptons, you will need a different dataset (different skim), see here:
+http://opendata.cern.ch/search?page=1&size=20&experiment=ATLAS&collision_energy=13TeV
 
 ### Changing the event selection (cuts)
 
@@ -68,7 +70,7 @@ a cut requiring the missing transverse energy (MET) to be above 100 GeV like thi
 if(*met_et < 100.e3){return kTRUE;}
 ```
 (Note that variables with dimension of energy is stored in unit MeV, hence 100 GeV corresponds to 100.e3.)
-Which background is now dominating your invariant mass plot?
+Try rerunning the code and plotting. Which background is now dominating your invariant mass plot?
 
 ### Adding histograms
 
@@ -127,3 +129,9 @@ variables = ['pt1', 'pt2', 'eta1', 'eta2', 'phi1', 'phi2', 'mll', 'met', 'mll_hi
 xtitles = {'pt1':'Leading lepton p_{T} (GeV)', 'pt2':'Subleading lepton p_{T} (GeV)', 'eta1':'Leading lepton #eta', 'eta2':'Subleading lepton #eta', 'phi1':'Leading lepton #phi', 'phi2':'Subleading lepton #phi', 'mll':'m_{ll} (GeV)', 'met':'E_{T}^{miss} (GeV)', 'mll_highMET':'m_{ll} (GeV)'}
 ```
 Run the plotting and look at your new histogram.
+
+To check that you have understood how this works: Add a new histogram showing the distribution of the
+angle between the leptons in the transverse plane. You may calculate this angle as
+```
+l1.DeltaPhi(l2)
+```
