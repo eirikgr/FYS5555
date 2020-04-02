@@ -73,7 +73,7 @@ void MySelector::Begin(TTree * /*tree*/)
     h_phi1[chn] = new TH1D("h_"+chn+"_phi1", chn+"_phi1", 40, -M_PI, M_PI);  
     h_phi2[chn] = new TH1D("h_"+chn+"_phi2", chn+"_phi2", 40, -M_PI, M_PI);  
     h_met[chn] = new TH1D("h_"+chn+"_met", chn+"_met", 30, 0, 1500); 
-    h_mll[chn] = new TH1D("h_"+chn+"_mll", chn+"_mll", 50, 0, 2000); 		
+    h_mll[chn] = new TH1D("h_"+chn+"_mll", chn+"_mll", 50, 0, 3000); 		
   }
 
 
