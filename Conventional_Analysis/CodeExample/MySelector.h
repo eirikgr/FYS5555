@@ -36,8 +36,9 @@ public :
    map<TString, TH1*> h_phi1; //!                                                                                                                                                                                 
    map<TString, TH1*> h_phi2; //!                                                                                                                                                                                 
    map<TString, TH1*> h_met; //!                                                                                                                                                                                  
-   map<TString, TH1*> h_mll; //!                                                                                                                                                                                 
+   map<TString, TH1*> h_mll; //!
 
+  
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Int_t> runNumber = {fReader, "runNumber"};
    TTreeReaderValue<Int_t> eventNumber = {fReader, "eventNumber"};
@@ -51,13 +52,13 @@ public :
    TTreeReaderValue<Float_t> scaleFactor_BTAG = {fReader, "scaleFactor_BTAG"};
    TTreeReaderValue<Float_t> scaleFactor_LepTRIGGER = {fReader, "scaleFactor_LepTRIGGER"};
    TTreeReaderValue<Float_t> scaleFactor_PhotonTRIGGER = {fReader, "scaleFactor_PhotonTRIGGER"};
-   TTreeReaderValue<Float_t> scaleFactor_TauTRIGGER = {fReader, "scaleFactor_TauTRIGGER"};
-   TTreeReaderValue<Float_t> scaleFactor_DiTauTRIGGER = {fReader, "scaleFactor_DiTauTRIGGER"};
+  //TTreeReaderValue<Float_t> scaleFactor_TauTRIGGER = {fReader, "scaleFactor_TauTRIGGER"};
+  //TTreeReaderValue<Float_t> scaleFactor_DiTauTRIGGER = {fReader, "scaleFactor_DiTauTRIGGER"};
    TTreeReaderValue<Bool_t> trigE = {fReader, "trigE"};
    TTreeReaderValue<Bool_t> trigM = {fReader, "trigM"};
    TTreeReaderValue<Bool_t> trigP = {fReader, "trigP"};
-   TTreeReaderValue<Bool_t> trigT = {fReader, "trigT"};
-   TTreeReaderValue<Bool_t> trigDT = {fReader, "trigDT"};
+  //TTreeReaderValue<Bool_t> trigT = {fReader, "trigT"};
+  //TTreeReaderValue<Bool_t> trigDT = {fReader, "trigDT"};
    TTreeReaderValue<UInt_t> lep_n = {fReader, "lep_n"};
    TTreeReaderValue<vector<bool>> lep_truthMatched = {fReader, "lep_truthMatched"};
    TTreeReaderValue<vector<bool>> lep_trigMatched = {fReader, "lep_trigMatched"};
@@ -95,15 +96,15 @@ public :
    TTreeReaderArray<float> photon_ptcone30 = {fReader, "photon_ptcone30"};
    TTreeReaderArray<float> photon_etcone20 = {fReader, "photon_etcone20"};
    TTreeReaderArray<int> photon_convType = {fReader, "photon_convType"};
-   TTreeReaderValue<UInt_t> fatjet_n = {fReader, "fatjet_n"};
-   TTreeReaderArray<float> fatjet_pt = {fReader, "fatjet_pt"};
-   TTreeReaderArray<float> fatjet_eta = {fReader, "fatjet_eta"};
-   TTreeReaderArray<float> fatjet_phi = {fReader, "fatjet_phi"};
-   TTreeReaderArray<float> fatjet_E = {fReader, "fatjet_E"};
-   TTreeReaderArray<float> fatjet_m = {fReader, "fatjet_m"};
-   TTreeReaderArray<int> fatjet_truthMatched = {fReader, "fatjet_truthMatched"};
-   TTreeReaderArray<float> fatjet_D2 = {fReader, "fatjet_D2"};
-   TTreeReaderArray<float> fatjet_tau32 = {fReader, "fatjet_tau32"};
+  //TTreeReaderValue<UInt_t> fatjet_n = {fReader, "fatjet_n"};
+   // TTreeReaderArray<float> fatjet_pt = {fReader, "fatjet_pt"};
+   // TTreeReaderArray<float> fatjet_eta = {fReader, "fatjet_eta"};
+   // TTreeReaderArray<float> fatjet_phi = {fReader, "fatjet_phi"};
+   // TTreeReaderArray<float> fatjet_E = {fReader, "fatjet_E"};
+   // TTreeReaderArray<float> fatjet_m = {fReader, "fatjet_m"};
+   // TTreeReaderArray<int> fatjet_truthMatched = {fReader, "fatjet_truthMatched"};
+   // TTreeReaderArray<float> fatjet_D2 = {fReader, "fatjet_D2"};
+   // TTreeReaderArray<float> fatjet_tau32 = {fReader, "fatjet_tau32"};
    TTreeReaderValue<UInt_t> tau_n = {fReader, "tau_n"};
    TTreeReaderArray<float> tau_pt = {fReader, "tau_pt"};
    TTreeReaderArray<float> tau_eta = {fReader, "tau_eta"};
@@ -115,17 +116,17 @@ public :
    TTreeReaderArray<int> tau_nTracks = {fReader, "tau_nTracks"};
    TTreeReaderArray<float> tau_BDTid = {fReader, "tau_BDTid"};
    TTreeReaderValue<Float_t> ditau_m = {fReader, "ditau_m"};
-   TTreeReaderArray<float> truth_pt = {fReader, "truth_pt"};
-   TTreeReaderArray<float> truth_eta = {fReader, "truth_eta"};
-   TTreeReaderArray<float> truth_phi = {fReader, "truth_phi"};
-   TTreeReaderArray<float> truth_E = {fReader, "truth_E"};
-   TTreeReaderArray<int> truth_pdgid = {fReader, "truth_pdgid"};
+   // TTreeReaderArray<float> truth_pt = {fReader, "truth_pt"};
+   // TTreeReaderArray<float> truth_eta = {fReader, "truth_eta"};
+   // TTreeReaderArray<float> truth_phi = {fReader, "truth_phi"};
+   // TTreeReaderArray<float> truth_E = {fReader, "truth_E"};
+   // TTreeReaderArray<int> truth_pdgid = {fReader, "truth_pdgid"};
    TTreeReaderArray<float> lep_pt_syst = {fReader, "lep_pt_syst"};
    TTreeReaderValue<Float_t> met_et_syst = {fReader, "met_et_syst"};
    TTreeReaderArray<float> jet_pt_syst = {fReader, "jet_pt_syst"};
    TTreeReaderArray<float> photon_pt_syst = {fReader, "photon_pt_syst"};
-   TTreeReaderArray<float> fatjet_pt_syst = {fReader, "fatjet_pt_syst"};
-   TTreeReaderArray<float> tau_pt_syst = {fReader, "tau_pt_syst"};
+  //TTreeReaderArray<float> fatjet_pt_syst = {fReader, "fatjet_pt_syst"};
+  // TTreeReaderArray<float> tau_pt_syst = {fReader, "tau_pt_syst"};
 
 
    MySelector(TTree * /*tree*/ =0) { }
