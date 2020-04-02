@@ -5,11 +5,15 @@
   gROOT->SetStyle("ATLAS");
   atlasStyle->SetTitleSize(0.06,"Y");
   gROOT->ForceStyle();
-  
+
+  Int_t Nmasses;
+
+  ifstream limitinput("inputs.txt");
+  limitinput >> Nmasses;
+
+  cout << "Number of mass points: " << Nmasses << endl;
 
   ifstream input("limits.txt");
-
-  Int_t Nmasses = 18;
 
   Double_t* mass = new Double_t[Nmasses];
   Double_t* xsec = new Double_t[Nmasses];
