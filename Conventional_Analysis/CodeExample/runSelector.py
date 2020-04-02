@@ -6,10 +6,9 @@ t0 = time.time()
 arg1 = sys.argv[1]  
 
 if arg1 == 'Data': 
-        input_dir = '../2lep/Data/'
+        input_dir = '2lep/Data/'
 elif arg1 == 'MC': 
-        input_dir = '/home/eirikgr/Documents/openData_13TeV/MC/BSM_Signal_Samples/'
-        input_dir1 = '/home/eirikgr/Documents/openData_13TeV/MC/SM_Backgrounds/'
+        input_dir = '2lep/MC/'
 
 
 myChain = TChain('mini') 
@@ -20,10 +19,10 @@ for filename in os.listdir(input_dir):
         print filename  
         myChain.Add(input_dir+filename) 
 if arg1 == 'MC': 
-        for filename in os.listdir(input_dir1):
+        for filename in os.listdir(input_dir):
                 if not '.root' in filename: continue 
                 print filename  
-                myChain.Add(input_dir1+filename)
+                myChain.Add(input_dir+filename)
 
 if not os.path.exists('./Histograms'):
     os.makedirs('./Histograms')
@@ -43,9 +42,9 @@ print "Number of events to process: %d" %entries
 print "-------------------------------------------"
 
 if arg1 == 'Data': 
-        myChain.Process("MySelector.C", "Data")
+        myChain.Process("MySelector.C+", "Data")
 else: 
-        myChain.Process("MySelector.C", "MC") 
+        myChain.Process("MySelector.C+", "MC") 
 
 t = int( time.time()-t0 )/60  
 
