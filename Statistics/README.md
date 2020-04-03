@@ -9,6 +9,7 @@ limit around the expected (median) value.
 Inputs are read from the file "inputs.txt", which is currently set up to reproduce the electron channel
 limits (Fig. 2, top left) from https://arxiv.org/abs/1407.7494. The format is
 
+```
 [Number of mass points]
 [W' mass] [mT threshold]
 [signal efficiency] [signal eff. uncertainty] [number of predicted signal events] [background] [background uncertainty] [observed data]
@@ -19,6 +20,7 @@ limits (Fig. 2, top left) from https://arxiv.org/abs/1407.7494. The format is
 ...
 ...
 ...
+```
 
 The plot from the above publication can be reproduced with the commands:
 - `root -l -q runLimits.cpp`
