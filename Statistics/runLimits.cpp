@@ -77,14 +77,14 @@
     
     Double_t limit = mcb->excludedSignal(step, false);
 	
-    cout << "\nObserved limit: " << limit << endl;
+    cout << "\nObserved limit: " << limit << " fb" << endl;
     
     cout << "Observed limit / step = " << limit/step << endl;
 
     
     Double_t* exp = mcb->expectedExclusion(step,100000,false);
 
-    cout << "\nExpected limit and bands:\n";
+    cout << "\nExpected limit and bands [fb]:\n";
     cout << "-2sigma     -1sigma     median    +1sigma     +2sigma\n";
     cout << exp[0] << "     " << exp[1] << "     " << exp[2] << "     " << exp[3] << "     " << exp[4] << endl;
 

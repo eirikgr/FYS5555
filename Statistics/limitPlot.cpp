@@ -73,7 +73,7 @@
   }
   fillP2S->SetFillColor(5);
 
-  xsecG->GetHistogram()->SetYTitle("#sigma [pb]");
+  xsecG->GetHistogram()->SetYTitle("#sigma [fb]");
   xsecG->GetHistogram()->SetXTitle("W' mass [GeV]");
   
   xsecG->GetHistogram()->GetYaxis()->SetRangeUser(5.0e-2,5.0e3);
