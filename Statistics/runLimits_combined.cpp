@@ -116,9 +116,26 @@
     cout << "Observed limit / step = " << limit/step << endl;
 
 
+    Int_t Npseudos = 1000; //number of background-only pseudo-experiments
+	
+    //The observed limit runs very fast, but when we repeat this calculation many times for the green and yellow
+    //bands, running time can be long. Let's try some accuracy tuning to get things to run in reasonable time.
+    //You can comment this out to run with "full" precision.
     step /= 2.0;
-    mcb->Nmc = 1000;
-    Double_t* exp = mcb->expectedExclusion(step,1000,false);
+    mcb->Nmc = 1500;
+    
+    Bool_t highStat = false;
+    for (int chan = 0; chan < Nchannels; chan++)
+      if (bkg[mass][chan] > 2500.)
+	highStat = true;
+
+    if (highStat) {
+      Npseudos /= 2;
+      mcb->Nmc *= 2.5;
+    }
+    
+
+    Double_t* exp = mcb->expectedExclusion(step,Npseudos,false);
 
     cout << "\nExpected limit and bands [fb]:\n";
     cout << "-2sigma     -1sigma     median    +1sigma     +2sigma\n";
