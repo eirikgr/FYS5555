@@ -130,14 +130,23 @@
     mcb->Nmc = 1500;
     
     Bool_t highStat = false;
-    for (Int_t chan = 0; chan < Nchannels; chan++)
+    Bool_t lowStat = true;
+    for (Int_t chan = 0; chan < Nchannels; chan++) {
       if (bkg[mass][chan] > 2500.)
 	highStat = true;
+      if (bkg[mass][chan] > 5.)
+	lowStat = false;
+    }
 
+    //For very high background levels, might be better to run fewer pseudos with higher precision
     if (highStat) {
       Npseudos /= 2;
       mcb->Nmc *= 2.5;
     }
+
+    //For very low background levels, there are few different outcomes, and we can crank up the number of pseudos
+    if (lowStat)
+      Npseudos = 10000;
     
 
     Double_t* exp = mcb->expectedExclusion(step,Npseudos,false);
