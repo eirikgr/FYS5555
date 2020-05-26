@@ -75,7 +75,7 @@ for key in infos.keys():
 
 # Function for making histograms
 
-L = 10.6 # integrated luminosity = 10.6 fb^-1 
+L = 10.06 # integrated luminosity = (10.06 +/- 0.37) fb^-1 
     
 def fill_hist(h, h_name, key, ID):
  
