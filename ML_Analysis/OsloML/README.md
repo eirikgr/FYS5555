@@ -5,19 +5,13 @@ Machine learning tools to be used for educational purposes
 The *ReadRootFiles* read the openData ntuples from file and produce h5 files. These files can be read later in *MakeTrainingAndTestingSamples* to create training and testing samples. The *OpenDataPandaFramework* containes the method for doing the root -> panda -> h5 files. Doing skimming, slimming and augmentation before preparing a flat panda data frame to be used in ML. 
 
 # Installation
-Two additional packages (assuming you have followed instructions https://github.com/Etienne357/FYS5555/tree/master/ML_Analysis/Anaconda_setup) are needed:
+One additional packages (assuming you have followed instructions https://github.com/Etienne357/FYS5555/tree/master/Anaconda_setup) are needed:
 (NOTE: Always work in the conda environment!)
 
 ```
 pip install import-ipynb
 ```
 
-and 
-
-```
-conda install awkward
-conda install awkward-numba # optional: integration with and optimization by Numba
-```
 
 Note that there is no need for ROOT!
 
