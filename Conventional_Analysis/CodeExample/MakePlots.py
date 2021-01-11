@@ -65,7 +65,7 @@ colours = dict(Diboson=kAzure+1, Top=kRed+1, Zjets=kOrange-2, Wjets=kGray, Zprim
 # Extract info about cross section and sum of weights from infofile 
 
 info = {} 
-for key in infos.keys(): 
+for key in list(infos.keys()): 
         ID = infos[key]['DSID']
         info[ID] = {} 
         info[ID]['xsec'] = infos[key]['xsec'] 

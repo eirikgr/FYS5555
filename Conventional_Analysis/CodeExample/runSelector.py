@@ -16,12 +16,12 @@ myChain = TChain('mini')
 
 for filename in os.listdir(input_dir):
         if not '.root' in filename: continue 
-        print filename  
+        print(filename)  
         myChain.Add(input_dir+filename) 
 if arg1 == 'MC': 
         for filename in os.listdir(input_dir):
                 if not '.root' in filename: continue 
-                print filename  
+                print(filename)  
                 myChain.Add(input_dir+filename)
 
 if not os.path.exists('./Histograms'):
@@ -33,13 +33,13 @@ if not os.path.exists('./Histograms/Data/'):
 
 entries = myChain.GetEntries() 
 
-print "-------------------------------------------"
+print("-------------------------------------------")
 if arg1 == 'Data': 
-        print "Running on real data!"
+        print("Running on real data!")
 else: 
-        print "Running on Monte Carlo!" 
-print "Number of events to process: %d" %entries
-print "-------------------------------------------"
+        print("Running on Monte Carlo!") 
+print("Number of events to process: %d" %entries)
+print("-------------------------------------------")
 
 if arg1 == 'Data': 
         myChain.Process("MySelector.C+", "Data")
@@ -48,4 +48,4 @@ else:
 
 t = int( time.time()-t0 )/60  
 
-print "Time spent: %d min" %t 
+print("Time spent: %d min" %t) 
