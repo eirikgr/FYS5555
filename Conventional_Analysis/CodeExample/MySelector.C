@@ -146,8 +146,8 @@ Bool_t MySelector::Process(Long64_t entry)
   if( lep_etcone20[1]/lep_pt[1] < -0.1 || lep_etcone20[1]/lep_pt[1] > 0.2 ){ return kTRUE; } 
 
   // Identify the leptons 
-  if(fabs(lep_type[0])==11){ channel = "ee"; events_ee++; } // Electrons  
-  if(fabs(lep_type[0])==13){ channel = "uu"; events_uu++; } // Muons 
+  if(fabs(lep_type[0])==11){ channel = "ee";  } // Electrons  
+  if(fabs(lep_type[0])==13){ channel = "uu";  } // Muons 
 
   if(channel == "ee"){
     if(lep_pt[0]/1000. < 25){return kTRUE;} 
@@ -198,6 +198,10 @@ Bool_t MySelector::Process(Long64_t entry)
   h_met[channel]->Fill(*met_et/1000.0, wgt); 
   h_mll[channel]->Fill(dileptons.M(), wgt);
 
+
+  // Identify the leptons 
+  if(fabs(lep_type[0])==11){  events_ee++; } // Electrons  
+  if(fabs(lep_type[0])==13){  events_uu++; } // Muons 
 
 
   return kTRUE;

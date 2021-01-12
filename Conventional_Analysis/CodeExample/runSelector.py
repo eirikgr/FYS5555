@@ -1,4 +1,4 @@
-from ROOT import *
+from ROOT import TChain, TFile
 import sys, os, time
 
 t0 = time.time() 
@@ -6,9 +6,9 @@ t0 = time.time()
 arg1 = sys.argv[1]  
 
 if arg1 == 'Data': 
-        input_dir = '2lep/Data/'
+        input_dir = '/scratch/eirikgr/openData_13TeV/2lep/Data/'
 elif arg1 == 'MC': 
-        input_dir = '2lep/MC/'
+        input_dir = '/scratch/eirikgr/openData_13TeV/2lep/MC/'
 
 
 myChain = TChain('mini') 

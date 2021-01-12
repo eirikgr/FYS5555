@@ -1,17 +1,17 @@
-import ROOT
-from ROOT import *
+import ROOT as R
+#from ROOT import *
 import os, sys
 
 from infofile import infos
 
-ROOT.gROOT.SetBatch(1)
-ROOT.gStyle.SetOptStat(0);
-ROOT.gStyle.SetPadLeftMargin(0.13)
-ROOT.gStyle.SetLegendBorderSize(0)
-ROOT.gStyle.SetPalette(1)
-ROOT.gStyle.SetGridStyle(2)
-ROOT.gStyle.SetPadLeftMargin(0.13)
-ROOT.TH1.AddDirectory(kFALSE)
+R.gROOT.SetBatch(1)
+R.gStyle.SetOptStat(0);
+R.gStyle.SetPadLeftMargin(0.13)
+R.gStyle.SetLegendBorderSize(0)
+R.gStyle.SetPalette(1)
+R.gStyle.SetGridStyle(2)
+R.gStyle.SetPadLeftMargin(0.13)
+R.TH1.AddDirectory(False)
 
 channel = sys.argv[1] 
 
@@ -48,110 +48,106 @@ fileIDs = {'Diboson':Diboson, 'Zjets':Zjets, 'Wjets':Wjets, 'Top':Top, 'Zprime20
 
 hist_bkg = {}
 for var in variables:
-        hist_bkg[var] = {}
-        for bkg in backgrounds:
-                hist_bkg[var][bkg] = TH1F()
+    hist_bkg[var] = {}
+    for bkg in backgrounds:
+        hist_bkg[var][bkg] = R.TH1F()
 
 hist_sig = {}
 for var in variables:
-        hist_sig[var] = {}
-        for sig in signals:
-                hist_sig[var][sig] = TH1F()
-                
+    hist_sig[var] = {}
+    for sig in signals:
+        hist_sig[var][sig] = R.TH1F()
 
-colours = dict(Diboson=kAzure+1, Top=kRed+1, Zjets=kOrange-2, Wjets=kGray, Zprime2000=kBlue) 
+
+colours = dict(Diboson=R.kAzure+1, Top=R.kRed+1, Zjets=R.kOrange-2, Wjets=R.kGray, Zprime2000=R.kBlue) 
 
 
 # Extract info about cross section and sum of weights from infofile 
 
 info = {} 
 for key in list(infos.keys()): 
-        ID = infos[key]['DSID']
-        info[ID] = {} 
-        info[ID]['xsec'] = infos[key]['xsec'] 
-        info[ID]['sumw'] = infos[key]['sumw'] 
-        info[ID]['events'] = infos[key]['events']
+    ID = infos[key]['DSID']
+    info[ID] = {} 
+    info[ID]['xsec'] = infos[key]['xsec'] 
+    info[ID]['sumw'] = infos[key]['sumw'] 
+    info[ID]['events'] = infos[key]['events']
 
 
 # Function for making histograms
-
 L = 10.06 # integrated luminosity = (10.06 +/- 0.37) fb^-1 
-    
+
 def fill_hist(h, h_name, key, ID):
- 
-	h_midl = infile.Get(h_name).Clone("h_midl")
 
-	xsec = 1000*info[ID]['xsec']
-	nev = info[ID]['sumw'] 
-	
-	N_mc = xsec*L
+    h_midl = infile.Get(h_name).Clone("h_midl")
 
-	sf = N_mc/nev  
+    xsec = 1000*info[ID]['xsec']
+    nev = info[ID]['sumw'] 
 
-	if not h.GetName(): 
-		h=infile.Get(h_name)  
-		h.Scale(sf)
-		n = h.GetNbinsX()
-		for i in range(n):
-                        bc = h.GetBinContent(i)
-			if bc < 0: 
-				h.SetBinContent(i,0)
-		h.SetFillColor(colours[key])
-		h.SetLineColor(colours[key])	 
-	else:
-		h_midl.Scale(sf)
-		n = h_midl.GetNbinsX()
-		for i in range(n):
-			bc = h_midl.GetBinContent(i)
-		        if bc < 0: 
-				h_midl.SetBinContent(i,0) 
-		h.Add(h_midl)
+    N_mc = xsec*L
 
-                
-	return h  
+    sf = N_mc/nev  
 
+    if not h.GetName(): 
+        h=infile.Get(h_name)  
+        h.Scale(sf)
+        n = h.GetNbinsX()
+        for i in range(n):
+            bc = h.GetBinContent(i)
+            if bc<0:
+                h.SetBinContent(i,0)
+                h.SetFillColor(colours[key])
+                h.SetLineColor(colours[key])	 
+            else:
+                h_midl.Scale(sf)
+                n = h_midl.GetNbinsX()
+                for i in range(n):
+                    bc = h_midl.GetBinContent(i)
+                    if bc < 0: 
+                        h_midl.SetBinContent(i,0) 
+                        h.Add(h_midl)
 
-# Loop over files in MC directory  
+    return h  
 
+## Loop over files in MC directory  
 for filename in os.listdir('Histograms/MC/'):
-	if '.root' in filename: 
-		filepath = 'Histograms/MC/'+filename 
-		infile = TFile(filepath)
-		file_id = int(filename.split('.')[2])
-		#print filename
-                for var in variables:
-                        for bkg in backgrounds:
-                                if file_id in fileIDs[bkg]: 
-                                        hist_bkg[var][bkg] = fill_hist(hist_bkg[var][bkg], 'h_'+channel+'_'+var, bkg, file_id)
-                        for sig in signals:
-                                if file_id in fileIDs[sig]: 
-                                        hist_sig[var][sig] = fill_hist(hist_sig[var][sig], 'h_'+channel+'_'+var, sig, file_id)
+    if '.root' in filename: 
+        filepath = 'Histograms/MC/'+filename 
+        infile = R.TFile(filepath)
+        file_id = int(filename.split('.')[2])
+        for var in variables:
+            for bkg in backgrounds:
+                if file_id in fileIDs[bkg]: 
+                    print("Adding %i as %s"%(file_id,bkg))
+                    hist_bkg[var][bkg] = fill_hist(hist_bkg[var][bkg], 'h_'+channel+'_'+var, bkg, file_id)
+            for sig in signals:
+                if file_id in fileIDs[sig]: 
+                    hist_sig[var][sig] = fill_hist(hist_sig[var][sig], 'h_'+channel+'_'+var, sig, file_id)
 
 
 # Get data 
-	
-data = TFile('Histograms/Data/hist.Data.2016.root')
+
+data = R.TFile('Histograms/Data/hist.Data.2016.root')
 hist_d ={}
 
 for var in variables:
-        hist_d[var] = data.Get('h_'+channel+'_'+var) 
-        hist_d[var].SetMarkerStyle(20)
-        hist_d[var].SetMarkerSize(0.7)
-        hist_d[var].SetLineColor(kBlack)
-        hist_d[var].GetYaxis().SetTitle("Events")
-        hist_d[var].GetXaxis().SetTitle(xtitles[var]) 
-        hist_d[var].GetXaxis().SetTitleFont(43)
-        hist_d[var].GetXaxis().SetTitleSize(16)
-        hist_d[var].GetYaxis().SetTitleFont(43)
-        hist_d[var].GetYaxis().SetTitleSize(16)
-        hist_d[var].GetXaxis().SetLabelFont(43)
-        hist_d[var].GetXaxis().SetLabelSize(16)
-        hist_d[var].GetYaxis().SetLabelFont(43)
-        hist_d[var].GetYaxis().SetLabelSize(16)
-        hist_d[var].GetXaxis().SetTitleOffset(4)
-        hist_d[var].GetYaxis().SetTitleOffset(1.5)
+    hist_d[var] = data.Get('h_'+channel+'_'+var) 
+    hist_d[var].SetMarkerStyle(20)
+    hist_d[var].SetMarkerSize(0.7)
+    hist_d[var].SetLineColor(R.kBlack)
+    hist_d[var].GetYaxis().SetTitle("Events")
+    hist_d[var].GetXaxis().SetTitle(xtitles[var]) 
+    hist_d[var].GetXaxis().SetTitleFont(43)
+    hist_d[var].GetXaxis().SetTitleSize(16)
+    hist_d[var].GetYaxis().SetTitleFont(43)
+    hist_d[var].GetYaxis().SetTitleSize(16)
+    hist_d[var].GetXaxis().SetLabelFont(43)
+    hist_d[var].GetXaxis().SetLabelSize(16)
+    hist_d[var].GetYaxis().SetLabelFont(43)
+    hist_d[var].GetYaxis().SetLabelSize(16)
+    hist_d[var].GetXaxis().SetTitleOffset(4)
+    hist_d[var].GetYaxis().SetTitleOffset(1.5)
 
-        
+
 # Style histograms, make stack and histograms with full background
 
 stack = {} 
@@ -159,40 +155,40 @@ hist_r = {}
 hist_mc = {}
 
 for var in variables:
-        stack[var] = THStack(var, "")  
-        hist_mc[var] = TH1F()
-        hist_r[var] = TH1F()
-        for bkg in reversed(backgrounds): 
-                hist_bkg[var][bkg].GetYaxis().SetTitle("Events")
-                hist_bkg[var][bkg].GetXaxis().SetTitle(xtitles[var]) 
-                hist_bkg[var][bkg].GetXaxis().SetTitleFont(43)
-                hist_bkg[var][bkg].GetXaxis().SetTitleSize(16)
-                hist_bkg[var][bkg].GetYaxis().SetTitleFont(43)
-                hist_bkg[var][bkg].GetYaxis().SetTitleSize(16)
-                hist_bkg[var][bkg].GetXaxis().SetLabelFont(43)
-                hist_bkg[var][bkg].GetXaxis().SetLabelSize(16)
-                hist_bkg[var][bkg].GetYaxis().SetLabelFont(43)
-                hist_bkg[var][bkg].GetYaxis().SetLabelSize(16)
-                hist_bkg[var][bkg].GetXaxis().SetTitleOffset(4)
-                hist_bkg[var][bkg].GetYaxis().SetTitleOffset(1.5)
-                stack[var].Add(hist_bkg[var][bkg]) 
-	        if not hist_mc[var].GetName(): 
-		        hist_mc[var] = hist_bkg[var][bkg].Clone()
-	        else: 
-		        hist_mc[var].Add(hist_bkg[var][bkg])
-                hist_r[var] = hist_d[var].Clone()
-                hist_r[var].Divide(hist_mc[var])
-                hist_r[var].SetTitle("")
-                hist_r[var].GetXaxis().SetTitle(xtitles[var])
-                hist_r[var].GetYaxis().SetTitle("Data/#SigmaMC")
-                hist_r[var].GetYaxis().SetNdivisions(506)
-                hist_r[var].SetMarkerStyle(20)
-                hist_r[var].SetMarkerSize(0.7)
+    stack[var] = R.THStack(var, "")  
+    hist_mc[var] = R.TH1F()
+    hist_r[var] = R.TH1F()
+    for bkg in reversed(backgrounds): 
+        hist_bkg[var][bkg].GetYaxis().SetTitle("Events")
+        hist_bkg[var][bkg].GetXaxis().SetTitle(xtitles[var]) 
+        hist_bkg[var][bkg].GetXaxis().SetTitleFont(43)
+        hist_bkg[var][bkg].GetXaxis().SetTitleSize(16)
+        hist_bkg[var][bkg].GetYaxis().SetTitleFont(43)
+        hist_bkg[var][bkg].GetYaxis().SetTitleSize(16)
+        hist_bkg[var][bkg].GetXaxis().SetLabelFont(43)
+        hist_bkg[var][bkg].GetXaxis().SetLabelSize(16)
+        hist_bkg[var][bkg].GetYaxis().SetLabelFont(43)
+        hist_bkg[var][bkg].GetYaxis().SetLabelSize(16)
+        hist_bkg[var][bkg].GetXaxis().SetTitleOffset(4)
+        hist_bkg[var][bkg].GetYaxis().SetTitleOffset(1.5)
+        stack[var].Add(hist_bkg[var][bkg]) 
+        if not hist_mc[var].GetName(): 
+            hist_mc[var] = hist_bkg[var][bkg].Clone()
+        else: 
+            hist_mc[var].Add(hist_bkg[var][bkg])
+            hist_r[var] = hist_d[var].Clone()
+            hist_r[var].Divide(hist_mc[var])
+            hist_r[var].SetTitle("")
+            hist_r[var].GetXaxis().SetTitle(xtitles[var])
+            hist_r[var].GetYaxis().SetTitle("Data/#SigmaMC")
+            hist_r[var].GetYaxis().SetNdivisions(506)
+            hist_r[var].SetMarkerStyle(20)
+            hist_r[var].SetMarkerSize(0.7)
 
 
 # Make plot legend 
 
-leg = TLegend(0.70,0.50,0.88,0.88)
+leg = R.TLegend(0.70,0.50,0.88,0.88)
 leg.SetFillStyle(4000)  
 leg.SetFillColor(0)
 leg.SetTextFont(42)
@@ -203,85 +199,85 @@ bkg_labels = {'Zjets':'Z+jets', 'Top':'Top', 'Diboson':'Diboson', 'Wjets':'W+jet
 sig_labels = {'Zprime2000':"Z' (2 TeV)"}
 
 for bkg in backgrounds: 
-        leg.AddEntry(hist_bkg['pt1'][bkg], bkg_labels[bkg], "f")
+    leg.AddEntry(hist_bkg['pt1'][bkg], bkg_labels[bkg], "f")
 
 for sig in signals: 
-        leg.AddEntry(hist_sig['pt1'][sig], sig_labels[sig], "f")
-        
+    leg.AddEntry(hist_sig['pt1'][sig], sig_labels[sig], "f")
+
 leg.AddEntry(hist_d['pt1'],"Data","ple")
 
 selection = ""
 if channel == "ee": 
-        selection = "ee" 
-if channel == "uu": 
+    selection = "ee" 
+    if channel == "uu": 
         selection = "#mu#mu"
-        
+
 # Make plots 
 
 for var in variables: 
 
-	cnv = TCanvas("cnv_"+var,"", 500, 500)
-        cnv.SetTicks(1,1) 
-        cnv.SetLeftMargin(0.13) 
-        #cnv.SetLogy()
-        
-	p1 = TPad("p1", "", 0, 0.35, 1, 1) 
-        p2 = TPad("p2", "", 0, 0.0, 1, 0.35) 
+    cnv = R.TCanvas("cnv_"+var,"", 500, 500)
+    cnv.SetTicks(1,1) 
+    cnv.SetLeftMargin(0.13) 
+    #cnv.SetLogy()
 
-        p1.SetLogy()
-        p1.SetBottomMargin(0.0) 
-        p1.Draw() 
-        p1.cd()
-        
-        stack[var].Draw("hist")
-        stack[var].SetMinimum(10E-2)
-        stack[var].GetYaxis().SetTitle("Events")
-        stack[var].GetYaxis().SetTitleFont(43)
-        stack[var].GetYaxis().SetTitleSize(16)
-        stack[var].GetYaxis().SetLabelFont(43)
-        stack[var].GetYaxis().SetLabelSize(16)
-        stack[var].GetYaxis().SetTitleOffset(1.5)
-        if var in ['eta1', 'eta2', 'phi1', 'phi2']: 
-                maximum = stack[var].GetMaximum() 
-                stack[var].SetMaximum(maximum*10E4)
+    p1 = R.TPad("p1", "", 0, 0.35, 1, 1) 
+    p2 = R.TPad("p2", "", 0, 0.0, 1, 0.35) 
+
+    p1.SetLogy()
+    p1.SetBottomMargin(0.0) 
+    p1.Draw() 
+    p1.cd()
+
+    stack[var].Draw("hist")
+    stack[var].SetMinimum(10E-2)
+    stack[var].GetYaxis().SetTitle("Events")
+    stack[var].GetYaxis().SetTitleFont(43)
+    stack[var].GetYaxis().SetTitleSize(16)
+    stack[var].GetYaxis().SetLabelFont(43)
+    stack[var].GetYaxis().SetLabelSize(16)
+    stack[var].GetYaxis().SetTitleOffset(1.5)
+    if var in ['eta1', 'eta2', 'phi1', 'phi2']: 
+        maximum = stack[var].GetMaximum() 
+        stack[var].SetMaximum(maximum*10E4)
 
         hist_d[var].Draw("same e0")
         leg.Draw("same")
 
-        for sig in signals:
-                hist_sig[var][sig].SetFillColor(0);
-                hist_sig[var][sig].Draw("same hist");
-        
-        s = TLatex()
-        s.SetNDC(1);
-        s.SetTextAlign(13);
-        s.SetTextColor(kBlack);
-        s.SetTextSize(0.044);
-        s.DrawLatex(0.4,0.86,"#font[72]{ATLAS} Open Data");
-        s.DrawLatex(0.4,0.81,"#bf{#sqrt{s} = 13 TeV,^{}%.1f^{}fb^{-1}}" % (L));
-        s.DrawLatex(0.4,0.76,"#bf{"+selection+" selection}");
+    for sig in signals:
+        hist_sig[var][sig].SetFillColor(0);
+        hist_sig[var][sig].Draw("same hist");
+
+    s = R.TLatex()
+    s.SetNDC(1);
+    s.SetTextAlign(13);
+    s.SetTextColor(R.kBlack);
+    s.SetTextSize(0.044);
+    s.DrawLatex(0.4,0.86,"#font[72]{ATLAS} Open Data");
+    s.DrawLatex(0.4,0.81,"#bf{#sqrt{s} = 13 TeV,^{}%.1f^{}fb^{-1}}" % (L));
+    s.DrawLatex(0.4,0.76,"#bf{"+selection+" selection}");
 
 
-        p1.Update() 
-        p1.RedrawAxis() 
+    p1.Update() 
+    p1.RedrawAxis() 
 
-	cnv.cd() 
-        
-	p2.Draw() 
-        p2.cd() 
+    cnv.cd() 
 
-        p2.SetGridy()
+    p2.Draw() 
+    p2.cd() 
 
-	hist_r[var].SetMaximum(1.99) 
-        hist_r[var].SetMinimum(0.01) 	
-        hist_r[var].Draw("0PZ") 
+    p2.SetGridy()
 
-        p2.SetTopMargin(0) 
-        p2.SetBottomMargin(0.35) 
-        p2.Update()        
-        p2.RedrawAxis() 
+    hist_r[var].SetMaximum(1.99) 
+    hist_r[var].SetMinimum(0.01) 	
+    hist_r[var].Draw("0PZ") 
 
-	cnv.cd() 
-        cnv.Update() 
-        cnv.Print('Plots/'+channel+'_'+var+'.png') 
-        cnv.Close() 
+    p2.SetTopMargin(0) 
+    p2.SetBottomMargin(0.35) 
+    p2.Update()        
+    p2.RedrawAxis() 
+
+    cnv.cd() 
+    cnv.Update() 
+    cnv.Print('Plots/'+channel+'_'+var+'.png') 
+    cnv.Close() 
