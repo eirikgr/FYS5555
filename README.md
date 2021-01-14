@@ -27,7 +27,11 @@ More details on installation can be found here:
 
 **Linux**: https://docs.anaconda.com/anaconda/install/linux/
 
-Build the environment (using the python3 yml file in the github repo) 
+Activate anaconda in your terminal
+
+`source <path-to-where-anaconda-is-installed>/etc/profile.d/conda.sh`
+
+Build the environment (using the python3 yml file in the github repo) - this may take some time
 
 `conda env create -f environment_fys5555_py3.yml`
 
@@ -41,7 +45,6 @@ If you have installed conda as described above, when you start a new shell, all 
 
 ```
 source <path-to-where-anaconda-is-installed>/etc/profile.d/conda.sh
-conda env list
 conda activate fys5555_py3
 ``` 
 
@@ -76,7 +79,6 @@ If you have installed conda as described above, when you start a new shell, all 
 
 ```
 source <path-to-where-anaconda-is-installed>/etc/profile.d/conda.sh
-conda env list
 conda activate fys5555_py2
 ```
 
