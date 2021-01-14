@@ -4,7 +4,7 @@ This git page has been created to gather all the "hands-on" material of the cour
 
 To copy all the material on your PC, in the terminal do `git clone https://github.com/Etienne357/FYS5555.git`
 
-## Installation instructions (FOR ALL EXCEPT SUSYPHENO - see [below](#-installation-instructions-(for-susypheno)) for how to setup SUSYPheno software)
+## Installation instructions (FOR ALL EXCEPT SUSYPHENO - see [below](#installation-instructions-for-susypheno) for how to setup SUSYPheno software)
 
 To get all the software needed to run the programs the easiest is to install anaconda as described below. 
 
@@ -27,7 +27,7 @@ More details on installation can be found here:
 
 **Linux**: https://docs.anaconda.com/anaconda/install/linux/
 
-Build the environment (using the python3 yml file in the githug repo) 
+Build the environment (using the python3 yml file in the github repo) 
 
 `conda env create -f environment_fys5555_py3.yml`
 
