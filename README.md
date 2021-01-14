@@ -4,7 +4,7 @@ This git page has been created to gather all the "hands-on" material of the cour
 
 To copy all the material on your PC, in the terminal do `git clone https://github.com/Etienne357/FYS5555.git`
 
-## Installation instructions (FOR ALL EXCEPT SUSYPHENO - see [below](#installation-instructions-(for-susypheno)) for how to setup SUSYPheno software)
+## Installation instructions (FOR ALL EXCEPT SUSYPHENO - see [below](#-installation-instructions-(for-susypheno)) for how to setup SUSYPheno software)
 
 To get all the software needed to run the programs the easiest is to install anaconda as described below. 
 
