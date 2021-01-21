@@ -5,7 +5,7 @@ Machine learning tools to be used for educational purposes
 The *ReadRootFiles* read the openData ntuples from file and produce h5 files. These files can be read later in *MakeTrainingAndTestingSamples* to create training and testing samples. The *OpenDataPandaFramework* containes the method for doing the root -> panda -> h5 files. Doing skimming, slimming and augmentation before preparing a flat panda data frame to be used in ML. 
 
 # Installation
-One additional packages (assuming you have followed instructions https://github.com/Etienne357/FYS5555/tree/master/Anaconda_setup) are needed:
+One additional packages (assuming you have followed instructions https://github.com/eirikgr/FYS5555/tree/master/Anaconda_setup) are needed:
 (NOTE: Always work in the conda environment!)
 
 ```
