@@ -2,7 +2,7 @@
 
 This git page has been created to gather all the "hands-on" material of the course Research-based particle physics (FYS5555). Se more details below.
 
-To copy all the material on your PC, in the terminal do `git clone https://github.com/Etienne357/FYS5555.git`
+To copy all the material on your PC, in the terminal do `git clone https://github.com/eirikgr/FYS5555.git`
 
 ## Installation instructions (FOR ALL EXCEPT SUSYPHENO - see [below](#installation-instructions-for-susypheno) for how to setup SUSYPheno software)
 
