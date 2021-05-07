@@ -127,7 +127,7 @@ Bool_t MySelector::Process(Long64_t entry)
   //------------------------------//
 
   // Require (exactly) 2 leptons
-  if(*lep_n != 2){ return kTRUE; }
+  if(*lep_n >= 2){ return kTRUE; }
   // Require opposite charge
   if(lep_charge[0] == lep_charge[1]){ return kTRUE; } 
   // Require same flavour (2 electrons or 2 muons)
