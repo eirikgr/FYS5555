@@ -27,6 +27,11 @@ public :
    TTreeReader     fReader;  //!the tree reader
    TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
 
+   TString runcard;
+   Bool_t isData;
+   TString datatype;
+
+
    // Declaration of histograms
 
    map<TString, TH1*> h_pt1; //!                                                                                                                                                                               
@@ -37,6 +42,7 @@ public :
    map<TString, TH1*> h_phi2; //!                                                                                                                                                                                 
    map<TString, TH1*> h_met; //!                                                                                                                                                                                  
    map<TString, TH1*> h_mll; //!
+   map<TString, TH1*> h_cutflow; //!
 
   
    // Readers to access the data (delete the ones you do not need).
@@ -144,6 +150,9 @@ public :
    virtual TList  *GetOutputList() const { return fOutput; }
    virtual void    SlaveTerminate();
    virtual void    Terminate();
+   void ReadRunCard(TString path_to_card);
+   void DrawAndSave(TH1 *h,TString data_type, TString filename);
+
    ClassDef(MySelector,0);
 
    void WriteToFile(TString fileid, TString data_type);

@@ -29,9 +29,14 @@
 #include <TH2.h>
 #include <TStyle.h>
 #include <TMath.h>
+#include <TCanvas.h>
 #include "TLorentzVector.h"
 #include <map> 
 #include <math.h>
+#include <stdio.h>
+#include "TROOT.h"
+
+#define PRINTER(name) printer(#name, (name))
 
 // Define som global variables
 
@@ -53,13 +58,58 @@ TLorentzVector dileptons;
 
 Float_t wgt; 
 
+
+TString printer(char *name, int value) {
+  TString tname = name;
+  printf("name: %s\tvalue: %d\n", name, value);
+  return tname;
+}
+
+void MySelector::ReadRunCard(TString path_to_card){
+  fstream newfile;
+  string tp;
+  TString ttp;
+  newfile.open(path_to_card,ios::in); 
+  if (newfile.is_open()){
+    while(getline(newfile, tp)){ 
+      ttp = tp;
+      TObjArray *tx = ttp.Tokenize(" ");
+
+      delete tx;
+      
+    }
+    newfile.close(); //close the file object.
+  }
+}
+
 void MySelector::Begin(TTree * /*tree*/)
 {
   // The Begin() function is called at the start of the query.
   // When running with PROOF Begin() is only called on the client.
   // The tree argument is deprecated (on PROOF 0 is passed).
 
+  gROOT->SetBatch(kTRUE);
+
   option = GetOption();
+
+  TObjArray *tx = option.Tokenize(" ");
+
+  datatype = (((TObjString *)tx->At(0))->String());
+  if(datatype.EqualTo("MC"))isData = 0;
+  else if(datatype.EqualTo("Data")) isData = 1;
+  else{
+    printf("ERROR \t Unknown data type %s. Stopping\n",datatype.Data());
+    return;
+  }
+  printf("INFO \t Running on %s, isData = %i\n",datatype.Data(),isData);
+  if(tx->GetEntries() > 1){
+    runcard = (((TObjString *)tx->At(1))->String());
+    printf("INFO \t Using cuts as specified in %s\n",runcard.Data());
+  }else{
+    printf("INFO \t Using cuts as specified in source code\n");
+  }
+  delete tx;
+
 
   channels = {"ee", "uu"}; // Channels to be considered
    	
@@ -73,10 +123,15 @@ void MySelector::Begin(TTree * /*tree*/)
     h_phi1[chn] = new TH1D("h_"+chn+"_phi1", chn+"_phi1", 40, -M_PI, M_PI);  
     h_phi2[chn] = new TH1D("h_"+chn+"_phi2", chn+"_phi2", 40, -M_PI, M_PI);  
     h_met[chn] = new TH1D("h_"+chn+"_met", chn+"_met", 30, 0, 1500); 
-    h_mll[chn] = new TH1D("h_"+chn+"_mll", chn+"_mll", 50, 0, 3000); 		
+    h_mll[chn] = new TH1D("h_"+chn+"_mll", chn+"_mll", 50, 0, 3000); 	
+
+	h_cutflow[chn] = new TH1D("h_"+chn+"_cutflow", chn+"_cutflow", 15, 0, 15);
+    for (int i = 1; i<=h_cutflow[chn]->GetNbinsX(); i++) {
+      h_cutflow[chn]->GetXaxis()->SetBinLabel(i,Form("Cut %i",i)); 
+    }
   }
-
-
+  
+  
 }
 
 void MySelector::SlaveBegin(TTree * /*tree*/)
@@ -107,6 +162,9 @@ Bool_t MySelector::Process(Long64_t entry)
   //
   // The return value is currently not used.
 
+
+  Int_t nbin = 2; // used for adding to cutflow histogram
+
   fReader.SetLocalEntry(entry);
 
   // Count events 
@@ -114,24 +172,45 @@ Bool_t MySelector::Process(Long64_t entry)
   if( events_tot % 1000000 == 0 ){ cout << events_tot/1E6 << " million events processed" << endl; } 
 
   // Write histograms to file if we enter a new MC DSID (DSID = DataSet ID)  
-  if( option == "MC" ){
+  if( !isData ){
     DSID = *channelNumber; 
     if(prev_DSID == 0){ prev_DSID = *channelNumber; } 
-    if( DSID != prev_DSID ){ WriteToFile(Form("%d", prev_DSID), option); } 
+    if( DSID != prev_DSID ){ WriteToFile(Form("%d", prev_DSID), datatype); } 
     prev_DSID = DSID; 	
   }
 
+  // Calculate event weight 
+  wgt = 1.0; 
+  if( !isData ){
+    wgt = (*mcWeight)*(*scaleFactor_PILEUP)*(*scaleFactor_ELE)*(*scaleFactor_MUON)*(*scaleFactor_BTAG)*(*scaleFactor_LepTRIGGER); 
+  }
+
+
+  //PRINTER(lep_type[0]);
 
   //------------------------------//
   // Event selection & Kinematics //
   //------------------------------//
+  for( const auto & chn:channels ){
+    h_cutflow[chn]->AddBinContent(1,wgt);
+  }
 
   // Require (exactly) 2 leptons
-  if(*lep_n >= 2){ return kTRUE; }
+  if(*lep_n < 2){ return kTRUE; }
+
+  // Identify the leptons 
+  if(fabs(lep_type[0])==11){ channel = "ee";  } // Electrons  
+  if(fabs(lep_type[0])==13){ channel = "uu";  } // Muons 
+  
+  h_cutflow[channel]->AddBinContent(nbin++,wgt);
+  
   // Require opposite charge
   if(lep_charge[0] == lep_charge[1]){ return kTRUE; } 
+  h_cutflow[channel]->AddBinContent(nbin++,wgt);
+
   // Require same flavour (2 electrons or 2 muons)
   if(lep_type[0] != lep_type[1]){ return kTRUE; } 
+  h_cutflow[channel]->AddBinContent(nbin++,wgt);
 
   // Set Lorentz vectors 
   l1.SetPtEtaPhiE(lep_pt[0]/1000., lep_eta[0], lep_phi[0], lep_E[0]/1000.);
@@ -141,13 +220,13 @@ Bool_t MySelector::Process(Long64_t entry)
   if(fabs(lep_z0[0])*TMath::Sin(l1.Theta()) > 0.5){ return kTRUE; }
   if(fabs(lep_z0[1])*TMath::Sin(l2.Theta()) > 0.5){ return kTRUE; }
 
+  h_cutflow[channel]->AddBinContent(nbin++,wgt);
+
   // Lepton isolation cut 
   if( lep_etcone20[0]/lep_pt[0] < -0.1 || lep_etcone20[0]/lep_pt[0] > 0.2 ){ return kTRUE; } 
   if( lep_etcone20[1]/lep_pt[1] < -0.1 || lep_etcone20[1]/lep_pt[1] > 0.2 ){ return kTRUE; } 
 
-  // Identify the leptons 
-  if(fabs(lep_type[0])==11){ channel = "ee";  } // Electrons  
-  if(fabs(lep_type[0])==13){ channel = "uu";  } // Muons 
+  h_cutflow[channel]->AddBinContent(nbin++,wgt);
 
   if(channel == "ee"){
     if(lep_pt[0]/1000. < 25){return kTRUE;} 
@@ -168,6 +247,8 @@ Bool_t MySelector::Process(Long64_t entry)
     if(*trigM != 1){return kTRUE;}
   }
 
+  h_cutflow[channel]->AddBinContent(nbin++,wgt);
+
 
   // Sort Lorentz vector (leading lepton = l1, subleading lepton = l2)  
   if(lep_pt[1]>lep_pt[0]){
@@ -180,12 +261,8 @@ Bool_t MySelector::Process(Long64_t entry)
   dileptons = l1 + l2; 
   if(dileptons.M() < 80){return kTRUE;}
 
-
-  // Calculate event weight 
-  wgt = 1.0; 
-  if( option == "MC" ){
-    wgt = (*mcWeight)*(*scaleFactor_PILEUP)*(*scaleFactor_ELE)*(*scaleFactor_MUON)*(*scaleFactor_BTAG)*(*scaleFactor_LepTRIGGER); 
-  }
+  h_cutflow[channel]->AddBinContent(nbin++,wgt);
+  
 
   // Fill histograms
 
@@ -221,12 +298,25 @@ void MySelector::Terminate()
    // a query. It always runs on the client, it can be used to present
    // the results graphically or save the results to file.
 
-  if( option == "Data" ){ WriteToFile(Form("%d", 2016), option); } 
-  else{WriteToFile(Form("%d", DSID), option);}
+  if( isData ){ WriteToFile(Form("%d", 2016), datatype); } 
+  else{WriteToFile(Form("%d", DSID), datatype);}
   cout << "Total number of processed events: " << events_tot << endl; 
   cout << "Number of events in ee channel: " << events_ee << endl; 
   cout << "Number of events in uu channel: " << events_uu << endl; 
 
+}
+
+void MySelector::DrawAndSave(TH1 *h,TString data_type, TString filename){
+
+  TCanvas *c = new TCanvas("c","c",1);
+  c->cd();
+  h->SetFillColor(kAzure+7);
+  h->SetLineColor(kAzure+7);
+  h->GetXaxis()->SetTitle("Cut");
+  h->GetYaxis()->SetTitle("Number of events");
+  h->Draw("hist");
+  c->SaveAs("Histograms/"+data_type+"/"+filename);
+  delete c;
 }
 
 void MySelector::WriteToFile(TString fileid, TString data_type)
@@ -247,8 +337,11 @@ void MySelector::WriteToFile(TString fileid, TString data_type)
     h_phi2[chn]->Write(); 
     h_met[chn]->Write(); 
     h_mll[chn]->Write(); 
-  }
+    h_cutflow[chn]->Write(); 
+    DrawAndSave(h_cutflow[chn],data_type,"hist_cutflow_"+data_type+"_"+fileid+"_"+chn+".png");
 
+  }
+  
   file.Close(); 
 
   for( const auto & chn:channels ){
@@ -260,5 +353,6 @@ void MySelector::WriteToFile(TString fileid, TString data_type)
     h_phi2[chn]->Reset(); 
     h_met[chn]->Reset(); 
     h_mll[chn]->Reset();
+    h_cutflow[chn]->Reset(); 
   }
 }
